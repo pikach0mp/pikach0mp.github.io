@@ -4,7 +4,7 @@
     <link href='https://fonts.googleapis.com/css?family=Space+Mono' rel='stylesheet'>
     <style>
         body {
-            margin: 0px;
+            margin: 0rem;
             background: rgb(20, 20, 20);
         }
         #menu {
@@ -20,25 +20,27 @@
             padding: 0px 2vw;
             position: relative;
             text-decoration: none;
-            text-shadow: 0px 0px 30px #00b46056;
+            /* text-shadow: 0px 0px 30px #00b46056; */
         }
         #menu-items {
             margin-left: clamp(4rem, 20vw, 48rem);
             display:flex;
             flex-direction: column;
+            z-index: 10;
+
         }
         #background-pattern {
             height: 100vh;
             width: 100vw;
 
             background-image: radial-gradient(
-                #ffffff35,
+                rgba(119, 151, 151, 0.582),
                 transparent 6%
             );
             background-position: 0% 0%;
             background-size: 8vmin 8vmin;
             position: absolute;
-            z-index: -1;
+            z-index: 3;
             left: 0px;
             top: 0px;
         }
@@ -50,23 +52,61 @@
                 opacity: 1; /* Show the underline halfway through the animation */
             }
         }
+
+        #blur {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            z-index: 2;
+            backdrop-filter: blur(200px);
+        }
+        #mouse-follow {
+            background-color: white;
+            height: 15vmax;
+            aspect-ratio: 1;
+            position: absolute;
+            left: 50%;
+            top: 50%;   
+            translate: -50% -50%;
+            border-radius: 50%;
+            background: linear-gradient(
+                to right,
+                rgb(226, 253, 255),
+                rgb(232, 255, 61)
+            );
+            animation: rotate 20s infinite;
+            filter: blur(200px);
+        }
+        @keyframes rotate {
+            from {
+                rotate: 0deg;
+            }
+            50% {
+                scale: 1 1.5;
+            }
+            to {
+                rotate: 360deg;
+            }
+        }
     </style>
 </head>
 <body>
+    <div id="mouse-follow"></div>
+    <div id="blur"></div>
     <div id="menu">
         <div id="menu-items">
-            <a href="CatGallery.html" class="menu-item" data-value="GALLERY">
-                <span>G</span><span>A</span><span>L</span><span>L</span><span>E</span><span>R</span><span>Y</span><span class="empty-space">&nbsp;</span>
+            <a href="/" class="menu-item" data-value="HOME">
+                <span>H</span><span>O</span><span>M</span><span>E</span><span class="empty-space">&nbsp;</span>
             </a>
-            <a href="menu2.html" class="menu-item" data-value="MENU">
+            <a href="/" class="menu-item" data-value="MENU">
                 <span>M</span><span>E</span><span>N</span><span>U</span><span class="empty-space">&nbsp;</span>
             </a>
-            <!-- <a href="/" class="menu-item" data-value="ABOUT">
+            <a href="/" class="menu-item" data-value="ABOUT">
                 <span>A</span><span>B</span><span>O</span><span>U</span><span>T</span><span class="empty-space">&nbsp;</span>
             </a>
             <a href="/" class="menu-item" data-value="PIKACHU">
                 <span>P</span><span>I</span><span>K</span><span>A</span><span>C</span><span>H</span><span>U</span><span class="empty-space">&nbsp;</span>
-            </a> -->
+            </a>
         </div>
         <div id="background-pattern"></div>
     </div>
@@ -74,6 +114,18 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+
+            const mouseFollow = document.getElementById("mouse-follow");
+
+            document.body.onpointermove = event => {
+                const {clientX, clientY} = event;
+                mouseFollow.animate({
+                    left: `${clientX}px`,
+                    top: `${clientY}px`
+                }, {duration: 2500, fill:"forwards"})
+                
+            }
+
 
             const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             const menuItems = document.querySelectorAll(".menu-item");
@@ -122,18 +174,6 @@
                             interval = null;
                         }
                     }, 50);
-                });
-
-                menuItem.addEventListener("mouseout", event => {
-                    const toElement = event.relatedTarget;
-                    
-                    // Check if the mouse is leaving the menuItem and not just moving between spans
-                    if (!menuItem.contains(toElement)) {
-                        // clearInterval(blinkInterval);
-                        // clearInterval(interval);
-                        // clearMenuItemDecorations();
-                        // animatedMenuItem = null;
-                    }
                 });
             });
 
