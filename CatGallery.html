@@ -22,19 +22,20 @@
             position: absolute;
             left: 50%;
             top: 50%;
-            transform: translate(0%, -50%);
+            transform: translate(-50%, -50%);
         }
+
     </style>
     <head>
         <title>Jonathan's Website</title>
     </head>
-    <div id="image-gallery" data-mouse-down-at="0" data-prev-percentage="0">
-        <img src="images/IMG_1619.jpg" alt="Image 1" class="image" draggable="false">
-        <img src="images/IMG_3216.jpg" alt="Image 11" class="image" draggable="false">
-        <img src="images/derp.jpg" alt="Image 2" class="image" draggable="false">
-        <img src="images/IMG_1621.jpg" alt="Image 3" class="image" draggable="false">
-        <img src="images/IMG_3370.jpg" alt="Image 15" class="image" draggable="false">
+    <div id="image-gallery" data-mouse-down-at="0" data-prev-percentage="-50">
         <img src="images/IMG_3410.jpg" alt="Image 17" class="image" draggable="false">
+        <img src="images/IMG_1621.jpg" alt="Image 3" class="image" draggable="false">
+        <img src="images/IMG_3216.jpg" alt="Image 11" class="image" draggable="false">
+        <img src="images/IMG_1619.jpg" alt="Image 1" class="image" draggable="false">
+        <img src="images/derp.jpg" alt="Image 2" class="image" draggable="false">
+        <img src="images/IMG_3370.jpg" alt="Image 15" class="image" draggable="false">
         <img src="images/IMG_3221.jpg" alt="Image 12" class="image" draggable="false">
         <img src="images/IMG_1690.jpg" alt="Image 4" class="image" draggable="false">
         <img src="images/IMG_1694.jpg" alt="Image 5" class="image" draggable="false">
@@ -42,14 +43,18 @@
         <img src="images/IMG_3301.jpg" alt="Image 13" class="image" draggable="false">
         <img src="images/IMG_3390.jpg" alt="Image 16" class="image" draggable="false">
         <img src="images/IMG_3442.jpg" alt="Image 18" class="image" draggable="false">
-        <img src="images/IMG_3526.jpg" alt="Image 19" class="image" draggable="false">
         <img src="images/IMG_3325.jpg" alt="Image 14" class="image" draggable="false">
-        <img src="images/IMG_2076.jpg" alt="Image 7" class="image" draggable="false">
         <img src="images/IMG_1716.jpg" alt="Image 6" class="image" draggable="false">
         <img src="images/IMG_3104.jpg" alt="Image 10" class="image" draggable="false">
-
+        <img src="images/IMG_2076.jpg" alt="Image 7" class="image" draggable="false">
+        <img src="images/IMG_3526.jpg" alt="Image 19" class="image" draggable="false">
     </div>
     <script>
+        const gallery = document.getElementById("image-gallery");
+        const numImages = gallery.querySelectorAll(".image").length;
+        var previousMovePercentage = -50;
+        var percentageChangeToMoveImage = 100 / numImages;
+
         const track = document.getElementById("image-gallery")
 
         window.onmousedown = e =>
@@ -66,20 +71,45 @@
             percentage = -(mouseDelta / maxDelta) * 50;
             nextPercentage = parseFloat(track.dataset.prevPercentage) + percentage;
 
-            nextPercentage = Math.max(-100, Math.min(0, nextPercentage))
+            if (previousMovePercentage + percentageChangeToMoveImage < nextPercentage) {
+                // previousMovePercentage = nextPercentage;
+                moveBackImageToFront();
+                track.dataset.mouseDownAt = e.clientX;
+                nextPercentage = -50;
+                track.dataset.prevPercentage = nextPercentage;
+            }
+            else if (previousMovePercentage - percentageChangeToMoveImage > nextPercentage) {
+                // previousMovePercentage = nextPercentage;
+                moveFrontImageToBack();
+                track.dataset.mouseDownAt = e.clientX;
+                nextPercentage = -50;
+                track.dataset.prevPercentage = nextPercentage;
+            }
 
             track.dataset.percentage = nextPercentage;
-            track.animate({
-                transform: `translate(${nextPercentage}%, -50%)`
-            },{ duration: 1200, fill: "forwards"})
+            track.style.transform = `translate(${nextPercentage}%, -50%)`;
+            // track.animate({
+            //     transform: `translate(${nextPercentage}%, -50%)`
+            // },{ duration: 1200, fill: "forwards"})
 
         }
-
 
         window.onmouseup = e =>
         {
             track.dataset.mouseDownAt = "0";
             track.dataset.prevPercentage = track.dataset.percentage;
+        }
+
+        function moveFrontImageToBack(){
+            console.log("moving front to back");
+            let firstElementImage = gallery.firstElementChild;
+            gallery.appendChild(firstElementImage);
+        }
+
+        function moveBackImageToFront(){
+            console.log("moving back to front")
+            let lastElementImage = gallery.lastElementChild;
+            gallery.insertBefore(lastElementImage, gallery.firstElementChild);
         }
 
                 // Define the update function
