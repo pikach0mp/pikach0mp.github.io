@@ -1,103 +1,169 @@
+<!DOCTYPE html>
 <html>
+<head>
+    <link href='https://fonts.googleapis.com/css?family=Space+Mono' rel='stylesheet'>
     <style>
-        img
-        {
-            width: 40vmin;
-            height: 56vmin;
-            object-fit: cover;
-            object-position: 100% 50%;
+        body {
+            margin: 0px;
+            background: rgb(20, 20, 20);
         }
-        body
-        {
+        #menu {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .menu-item {
+            color: rgba(201, 255, 229, 0.887);
+            font-size: clamp(3rem, 8vw, 8rem);
+            font-family: "Space Mono";
+            display: inline-block;
+            padding: 0px 2vw;
+            position: relative;
+            text-decoration: none;
+            text-shadow: 0px 0px 30px #00b46056;
+        }
+        #menu-items {
+            margin-left: clamp(4rem, 20vw, 48rem);
+            display:flex;
+            flex-direction: column;
+        }
+        #background-pattern {
             height: 100vh;
             width: 100vw;
-            background-color: black;
-            margin: 0rem;
-            overflow: hidden;
-        }
-        #image-gallery
-        {
-            display:flex;
-            gap: 4vmin;
+
+            background-image: radial-gradient(
+                #ffffff35,
+                transparent 6%
+            );
+            background-position: 0% 0%;
+            background-size: 8vmin 8vmin;
             position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(0%, -50%);
+            z-index: -1;
+            left: 0px;
+            top: 0px;
+        }
+        @keyframes blink {
+            0%, 100% {
+                opacity: 0; /* Hide the underline at the start and end of the animation */
+            }
+            50% {
+                opacity: 1; /* Show the underline halfway through the animation */
+            }
         }
     </style>
-    <head>
-        <title>Jonathan's Website</title>
-    </head>
-    <div id="image-gallery" data-mouse-down-at="0" data-prev-percentage="0">
-        <img src="images/IMG_1619.jpg" alt="Image 1" class="image" draggable="false">
-        <img src="images/IMG_3216.jpg" alt="Image 11" class="image" draggable="false">
-        <img src="images/derp.jpg" alt="Image 2" class="image" draggable="false">
-        <img src="images/IMG_1621.jpg" alt="Image 3" class="image" draggable="false">
-        <img src="images/IMG_3370.jpg" alt="Image 15" class="image" draggable="false">
-        <img src="images/IMG_3410.jpg" alt="Image 17" class="image" draggable="false">
-        <img src="images/IMG_3221.jpg" alt="Image 12" class="image" draggable="false">
-        <img src="images/IMG_1690.jpg" alt="Image 4" class="image" draggable="false">
-        <img src="images/IMG_1694.jpg" alt="Image 5" class="image" draggable="false">
-        <img src="images/IMG_2857.jpg" alt="Image 9" class="image" draggable="false">
-        <img src="images/IMG_3301.jpg" alt="Image 13" class="image" draggable="false">
-        <img src="images/IMG_3390.jpg" alt="Image 16" class="image" draggable="false">
-        <img src="images/IMG_3442.jpg" alt="Image 18" class="image" draggable="false">
-        <img src="images/IMG_3526.jpg" alt="Image 19" class="image" draggable="false">
-        <img src="images/IMG_3325.jpg" alt="Image 14" class="image" draggable="false">
-        <img src="images/IMG_2076.jpg" alt="Image 7" class="image" draggable="false">
-        <img src="images/IMG_1716.jpg" alt="Image 6" class="image" draggable="false">
-        <img src="images/IMG_3104.jpg" alt="Image 10" class="image" draggable="false">
-
+</head>
+<body>
+    <div id="menu">
+        <div id="menu-items">
+            <a href="CatGallery.html" class="menu-item" data-value="GALLERY">
+                <span>G</span><span>A</span><span>L</span><span>L</span><span>E</span><span>R</span><span>Y</span><span class="empty-space">&nbsp;</span>
+            </a>
+            <a href="menu2.html" class="menu-item" data-value="MENU">
+                <span>M</span><span>E</span><span>N</span><span>U</span><span class="empty-space">&nbsp;</span>
+            </a>
+            <!-- <a href="/" class="menu-item" data-value="ABOUT">
+                <span>A</span><span>B</span><span>O</span><span>U</span><span>T</span><span class="empty-space">&nbsp;</span>
+            </a>
+            <a href="/" class="menu-item" data-value="PIKACHU">
+                <span>P</span><span>I</span><span>K</span><span>A</span><span>C</span><span>H</span><span>U</span><span class="empty-space">&nbsp;</span>
+            </a> -->
+        </div>
+        <div id="background-pattern"></div>
     </div>
+</body>
+
     <script>
-        const track = document.getElementById("image-gallery")
+        document.addEventListener("DOMContentLoaded", () => {
 
-        window.onmousedown = e =>
-        {
-            track.dataset.mouseDownAt = e.clientX;
-        }
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            const menuItems = document.querySelectorAll(".menu-item");
 
-        window.onmousemove = e =>
-        {
-            if (track.dataset.mouseDownAt === "0") return;
-
-            mouseDelta = parseFloat(track.dataset.mouseDownAt) - e.clientX;
-            maxDelta = window.innerWidth;
-            percentage = -(mouseDelta / maxDelta) * 50;
-            nextPercentage = parseFloat(track.dataset.prevPercentage) + percentage;
-
-            nextPercentage = Math.max(-100, Math.min(0, nextPercentage))
-
-            track.dataset.percentage = nextPercentage;
-            track.animate({
-                transform: `translate(${nextPercentage}%, -50%)`
-            },{ duration: 1200, fill: "forwards"})
-
-        }
+            let animatedMenuItem = null;
+            let interval = null;
+            let blinkInterval = null;
 
 
-        window.onmouseup = e =>
-        {
-            track.dataset.mouseDownAt = "0";
-            track.dataset.prevPercentage = track.dataset.percentage;
-        }
+            menuItems.forEach(menuItem => {
+                const spanElements = menuItem.querySelectorAll("span");
 
-                // Define the update function
-        function updateFunction() {
-            for (const image of track.getElementsByClassName("image"))
-            {
-                imageRect = image.getBoundingClientRect();
-                imageCenterX = imageRect.left + (imageRect.width / 2);
-                const screenWidth = window.innerWidth;
-                distanceFromRight = screenWidth - (imageCenterX + window.pageXOffset)
-                percentageFromRight = distanceFromRight / screenWidth * 100;
+                menuItem.addEventListener("mouseover", event => {
+                    if (animatedMenuItem == menuItem) return;
+                    if (interval != null) {
+                        clearInterval(interval);
+                        interval = null;
+                    }
 
-                image.style.objectPosition = `${100 - percentageFromRight}% center`;
+                    clearInterval(blinkInterval);
+                    resetToOriginal(animatedMenuItem);
+                    animatedMenuItem = menuItem;
+                    let count = 0;
+                    let currentIndex = 0;
+                    spanElements[0].style.textDecoration = "underline";
+                    interval = setInterval(() => {
+                        for (let i = spanElements.length - 2; i >= 0; i--) {
+                            if (i + 1 <= count / 2) {
+                                if (currentIndex <= i) {
+                                    spanElements[i + 1].style.textDecoration = "underline";
+                                    spanElements[i].style = "none";
+                                    currentIndex = i;
+                                }
+                                
+                                spanElements[i].textContent = menuItem.getAttribute("data-value")[i];
+                            }
+                            else {
+                                spanElements[i].textContent = letters[Math.floor(Math.random() * 26)];
+                            }
+                        }
+
+                        count += 1;
+                        if (count / 2 > menuItem.getAttribute("data-value").length) {
+                            blinkUnderline(menuItem);
+                            clearInterval(interval);
+                            interval = null;
+                        }
+                    }, 50);
+                });
+
+                menuItem.addEventListener("mouseout", event => {
+                    const toElement = event.relatedTarget;
+                    
+                    // Check if the mouse is leaving the menuItem and not just moving between spans
+                    if (!menuItem.contains(toElement)) {
+                        // clearInterval(blinkInterval);
+                        // clearInterval(interval);
+                        // clearMenuItemDecorations();
+                        // animatedMenuItem = null;
+                    }
+                });
+            });
+
+
+            function resetToOriginal(menuItem) {
+                if (menuItem == null) return;
+                let spanElements = menuItem.querySelectorAll("span");
+                for (let i = 0; i < spanElements.length - 1; i++) {
+                    spanElements[i].textContent = menuItem.getAttribute("data-value")[i];
+                    spanElements[i].style.textDecoration = "none";
+                }
+
+                spanElements[spanElements.length - 1].style.textDecoration = "none";
             }
-            // Request the next animation frame
-            requestAnimationFrame(updateFunction);
-        }
 
-        requestAnimationFrame(updateFunction);
+            function blinkUnderline(menuItem) {
+                if (menuItem == null) return;
+                let blinkingSpace = menuItem.lastElementChild;
+                let underlineActive = true;
+                blinkInterval = setInterval(() => {
+                    if (underlineActive) {
+                        blinkingSpace.style.textDecoration = "none";
+                        underlineActive = false;
+                    }
+                    else {
+                        blinkingSpace.style.textDecoration = "underline";
+                        underlineActive = true;
+                    }
+                }, 600);
+            }
+        });
     </script>
 </html>

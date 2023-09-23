@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href='https://fonts.googleapis.com/css?family=Space+Mono' rel='stylesheet'>
+    <style>
+        body {
+            background: black;
+        }
+        .container {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+        }
+        .card-holder {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 20px; 
+        }
+        .card {
+            width: 400px;
+            position: relative;
+            background-color: rgb(16 16 16);
+            border: 1px solid rgb(255 255 255 / 5%);
+            border-radius: 1.5rem;
+            padding: 1rem;
+            margin: 10px;
+            scale: 1.0;
+            transition: scale 600ms;
+            text-decoration: none;
+        }
+
+        .card:after {  
+            background: linear-gradient(
+                transparent,
+                rgb(116, 187, 188),
+                transparent
+            );
+            height: 70px;
+            width: 1px;
+            position: absolute;
+            left: -1px;
+            top: 65%;
+            content: "";
+            opacity: 0;
+            transition: top, opacity;
+            transition-duration: 600ms;
+            transition-timing-function: ease;
+        }
+
+        .card:hover:after {
+            top: 20%;
+            opacity: 1;
+        }
+
+        .card:hover {
+            scale: 1.04;
+        }
+
+        .card-content {  
+            color:rgba(201, 255, 229, 0.887);
+            display: flex;
+            font-family: "Space Mono";
+            font-size: clamp(.75rem, 1.5vw, 1.5rem);;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            background-image: radial-gradient(
+                rgba(255, 255, 255, 0.1) 1px, 
+                transparent 1px
+            );
+            background-position: 50% 50%;
+            background-size: 1.1rem 1.1rem;
+            padding: 5rem;
+            border-radius: 1.25rem;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card-holder">
+            <a href="index.html" class="card">
+                <div class="card-content">
+                    <h1>Menu 1</h1>
+                </div>
+            </a>
+            <a href="CatGallery.html" class="card">
+                <div class="card-content">
+                    <h1>Gallery</h1>
+                </div>
+            </a>
+            <!-- <a href="/" class="card">
+                <div class="card-content">
+                    <h1>Menu 3</h1>
+                </div>
+            </a>
+            <a href="/" class="card">
+                <div class="card-content">
+                    <h1>Menu 4</h1>
+                </div>
+            </a> -->
+        </div>
+    </div>
+</body>
+
+    <script>
+       
+    </script>
+</html>
